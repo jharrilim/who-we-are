@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, Image, ScrollView, ImageBackground } from 'react-native';
+import { StyleSheet, Text, View, Button, Image, ScrollView } from 'react-native';
 import { createStackNavigator, createAppContainer, NavigationScreenProp } from "react-navigation";
 import Profile from './screens/Profile';
 import { useScreens } from 'react-native-screens';
-
+import { AppContext } from './App.context';
+import Home from './screens/Home';
 useScreens();
 
 const styles = StyleSheet.create({
@@ -51,23 +52,25 @@ const App = ({ navigation }: AppProps) => {
   }, [scroll]);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.header}>This is who we are...</Text>
-        <ScrollView
-          horizontal
-          ref={r => setScroll(r)}
-        >
-          {mockData.map((v, i) => <Image key={`${i}-${v.title}`} testID={`${i}-${v.title}`} resizeMode="contain" style={{
-            height: 250,
-            width: 300
-          }} source={v.url} />)}
-        </ScrollView>
+    <AppContext.Provider key="appContext" value={{ name: '' }}>
+      <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <Text style={styles.header}>This is who we are...</Text>
+          <ScrollView
+            horizontal
+            ref={r => setScroll(r)}
+          >
+            {mockData.map((v, i) => <Image key={`${i}-${v.title}`} testID={`${i}-${v.title}`} resizeMode="contain" style={{
+              height: 250,
+              width: 300
+            }} source={v.url} />)}
+          </ScrollView>
 
+        </View>
+
+        <Button color="#55C" title="Enter" onPress={e => { navigation.navigate('Profile') }} />
       </View>
-
-      <Button color="#55C" title="Enter" onPress={e => { navigation.navigate('Profile') }} />
-    </View>
+    </AppContext.Provider>
   );
 }
 
@@ -82,6 +85,10 @@ const AppNavigator = createStackNavigator({
     screen: Profile,
     title: 'About You',
 
+  },
+  Home: {
+    screen: Home,
+    title: 'Our Home'
   }
 },
   {

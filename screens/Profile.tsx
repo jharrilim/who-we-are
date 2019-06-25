@@ -1,14 +1,24 @@
-import React, { FormEvent } from 'react';
+import React, { useContext } from 'react';
 import { Formik } from 'formik';
 import { View, TextInput, Button } from 'react-native';
-export const Profile = () => {
+import { AppContext } from '../App.context';
+import { NavigationScreenProp, createNavigator } from 'react-navigation';
+
+interface AppProps {
+  navigation: NavigationScreenProp<any, any>
+}
+
+export const Profile = ({ navigation }: AppProps) => {
+  const appContext = useContext(AppContext);
+
   return (
     <Formik
       initialValues={{
         name: ''
       }}
       onSubmit={values => {
-        alert('Welcome, ' + values.name)
+        appContext.name = values.name;
+        navigation && navigation.navigate('Home');
       }}
     >
       {props => (
